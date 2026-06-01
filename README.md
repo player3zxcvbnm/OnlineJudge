@@ -176,7 +176,7 @@ This ensures malicious code cannot affect the main server.
 
 ## Project Structure
 
-\```
+```
 OnlineJudge/
 ├── backend/
 │   ├── models/         ← MongoDB schemas
@@ -191,4 +191,4 @@ OnlineJudge/
 ├── frontend/
 │   └── src/
 └── README.md
-\```
+```
