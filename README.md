@@ -173,3 +173,22 @@ Each submitted code runs inside an isolated Docker container:
 - Container is destroyed after execution
 
 This ensures malicious code cannot affect the main server.
+
+## Project Structure
+
+\```
+OnlineJudge/
+├── backend/
+│   ├── models/         ← MongoDB schemas
+│   ├── routes/         ← API route definitions
+│   ├── controllers/    ← Route logic
+│   ├── middlewares/    ← JWT auth
+│   ├── config/         ← Database connection
+│   ├── compiler/       ← Code execution logic
+│   ├── docker/         ← Docker sandbox setup
+│   ├── queue/          ← BullMQ job queue
+│   └── server.js
+├── frontend/
+│   └── src/
+└── README.md
+\```
