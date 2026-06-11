@@ -89,6 +89,7 @@ Someone could try to intercept requests and tamper with verdicts on the server.
 **Collection 1: users**
 | Field | Description |
 |---|---|
+role:user/admin
 | `userId` | Unique identifier for each user |
 | `firstName` | First name |
 | `lastName` | Last name |
@@ -143,7 +144,7 @@ Someone could try to intercept requests and tamper with verdicts on the server.
 - Verdict display
 
 **Screen 3: Leaderboard**
-- List of last 10 submissions with verdicts
+- Rank by accepted submissions
 
 ### API Routes
 
@@ -151,13 +152,19 @@ Someone could try to intercept requests and tamper with verdicts on the server.
 POST /api/auth/register       → register a new user
 POST /api/auth/login          → login and get JWT token
 
-GET  /api/problems            → fetch all problems
+GET /api/problems?difficulty=Easy
+GET /api/problems?difficulty=Medium
+GET /api/problems?difficulty=Hard            
 GET  /api/problems/:id        → fetch one problem by id
 
 POST /api/submissions         → submit code for evaluation
 GET  /api/submissions/:id     → fetch result of a submission
 
 GET  /api/leaderboard         → fetch last 10 submissions
+
+POST /api/problems        → admin adds a new problem
+PUT  /api/problems/:id    → admin edits a problem
+DELETE /api/problems/:id  → admin removes a problem
 ```
 
 ---
