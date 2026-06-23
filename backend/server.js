@@ -11,6 +11,9 @@ app.use(express.json())
 const authRoutes = require('./routes/auth')
 app.use('/api/auth', authRoutes)
 
+const problemRoutes = require('./routes/problems')
+app.use('/api/problems', problemRoutes)
+
 app.get('/', (req, res) => {
   res.send('Server is running')
 })
