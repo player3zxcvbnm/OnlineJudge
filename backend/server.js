@@ -14,6 +14,9 @@ app.use('/api/auth', authRoutes)
 const problemRoutes = require('./routes/problems')
 app.use('/api/problems', problemRoutes)
 
+const submissionRoutes = require('./routes/submissions')
+app.use('/api/submissions', submissionRoutes)
+
 app.get('/', (req, res) => {
   res.send('Server is running')
 })
