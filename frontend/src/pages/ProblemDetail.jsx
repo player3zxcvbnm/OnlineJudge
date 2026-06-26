@@ -19,7 +19,21 @@ function ProblemDetail() {
     }, {
       headers: { Authorization: `Bearer ${token}` }
     })
-    alert(`Submitted! Verdict: ${res.data.verdict}`)
+
+    const submissionId = res.data.submissionId
+    
+    // Poll for verdict every 2 seconds
+    const interval = setInterval(async () => {
+      const verdictRes = await axios.get(`http://localhost:5000/api/submissions/${submissionId}`, {
+        headers: { Authorization: `Bearer ${token}` }
+      })
+      const verdict = verdictRes.data.verdict
+      if (verdict !== 'PENDING') {
+        clearInterval(interval)
+        alert(`Verdict: ${verdict}`)
+      }
+    }, 2000)
+
   } catch (err) {
     alert('Submission failed')
     console.log(err)
