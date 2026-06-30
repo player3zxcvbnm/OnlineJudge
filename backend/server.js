@@ -23,6 +23,9 @@ app.use('/api/testcases', testCaseRoutes)
 const leaderboardRoutes = require('./routes/leaderboard')
 app.use('/api/leaderboard', leaderboardRoutes)
 
+const contestRoutes = require('./routes/contests')
+app.use('/api/contests', contestRoutes)
+
 app.get('/', (req, res) => {
   res.send('Server is running')
 })

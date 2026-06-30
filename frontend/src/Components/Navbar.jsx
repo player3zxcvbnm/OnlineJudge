@@ -13,7 +13,7 @@ function Navbar() {
       <span onClick={() => navigate('/problems')} style={{ cursor: 'pointer', fontWeight: 'bold', fontSize: '18px', color: 'white' }}>OnlineJudge</span>
       <div style={{ display: 'flex', gap: '20px' }}>
         <span onClick={() => navigate('/problems')} style={{ cursor: 'pointer', color: 'white' }}>Problems</span>
-        <span onClick={() => navigate('/leaderboard')} style={{ cursor: 'pointer', color: 'white' }}>Leaderboard</span>
+        <span onClick={() => navigate('/contests')} style={{ cursor: 'pointer', color: 'white' }}>Contests</span>
         <span onClick={() => navigate('/profile')} style={{ cursor: 'pointer', color: 'white' }}>Profile</span>
         <span onClick={logout} style={{ cursor: 'pointer', color: 'red' }}>Logout</span>
       </div>

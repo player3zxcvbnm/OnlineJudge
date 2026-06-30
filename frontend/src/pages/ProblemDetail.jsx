@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useParams, useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import Editor from '@monaco-editor/react'
 
@@ -8,6 +8,7 @@ function ProblemDetail() {
   const [problem, setProblem] = useState(null)
   const [code, setCode] = useState('// Write your solution here')
   const [language, setLanguage] = useState('cpp')
+  const navigate = useNavigate()
 
   const handleSubmit = async () => {
   try {
@@ -22,7 +23,6 @@ function ProblemDetail() {
 
     const submissionId = res.data.submissionId
     
-    // Poll for verdict every 2 seconds
     const interval = setInterval(async () => {
       const verdictRes = await axios.get(`http://localhost:5000/api/submissions/${submissionId}`, {
         headers: { Authorization: `Bearer ${token}` }
@@ -56,8 +56,8 @@ function ProblemDetail() {
 
   return (
     <div style={{ display: 'flex', height: 'calc(100vh - 50px)' }}>
-      {/* Left side - problem */}
       <div style={{ width: '40%', padding: '20px', overflowY: 'auto', borderRight: '1px solid #333' }}>
+        <button onClick={() => navigate(-1)} style={{ marginBottom: '20px', padding: '6px 14px', cursor: 'pointer' }}>← Back</button>
         <h2>{problem.title}</h2>
         <p>Difficulty: <span style={{ color: problem.difficulty === 'Easy' ? 'green' : problem.difficulty === 'Medium' ? 'orange' : 'red' }}>{problem.difficulty}</span></p>
         <p>Time Limit: {problem.timeLimit}ms | Memory Limit: {problem.memoryLimit}MB</p>
@@ -68,7 +68,6 @@ function ProblemDetail() {
         <p>Tags: {problem.tags.join(', ')}</p>
       </div>
 
-      {/* Right side - editor */}
       <div style={{ width: '60%', display: 'flex', flexDirection: 'column' }}>
         <div style={{ padding: '10px', background: '#1e1e1e', display: 'flex', gap: '10px', alignItems: 'center' }}>
           <select value={language} onChange={(e) => setLanguage(e.target.value)} style={{ padding: '5px', background: '#333', color: 'white', border: 'none' }}>
