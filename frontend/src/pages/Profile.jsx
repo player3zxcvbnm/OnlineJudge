@@ -82,7 +82,7 @@ function Profile() {
               <td style={{ padding: '10px', borderBottom: '1px solid #eee' }}>{sub.problemId?.title || 'Unknown'}</td>
               <td style={{ padding: '10px', borderBottom: '1px solid #eee' }}>{sub.language}</td>
               <td style={{ padding: '10px', borderBottom: '1px solid #eee', color: sub.verdict === 'AC' ? 'green' : 'red' }}>{sub.verdict}</td>
-              <td style={{ padding: '10px', borderBottom: '1px solid #eee' }}>{new Date(sub.createdAt).toLocaleDateString()}</td>
+              <td style={{ padding: '10px', borderBottom: '1px solid #eee' }}>{new Date(sub.createdAt).toLocaleString()}</td>
             </tr>
           ))}
         </tbody>

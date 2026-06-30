@@ -19,14 +19,21 @@ router.get('/:contestId', async (req, res) => {
           createdAt: { $gte: contest.startTime, $lte: contest.endTime }
         } 
       },
-      { $group: { _id: '$userId', solvedCount: { $addToSet: '$problemId' } } },
-      { $project: { solvedCount: { $size: '$solvedCount' } } },
-      { $sort: { solvedCount: -1 } }
+      { $sort: { createdAt: 1 } },
+      { 
+        $group: { 
+          _id: '$userId', 
+          solvedProblems: { $addToSet: '$problemId' },
+          lastSolveTime: { $max: '$createdAt' }
+        } 
+      },
+      { $project: { solvedCount: { $size: '$solvedProblems' }, lastSolveTime: 1 } },
+      { $sort: { solvedCount: -1, lastSolveTime: 1 } }
     ])
 
     const leaderboard = await Promise.all(results.map(async (r) => {
       const user = await User.findById(r._id).select('firstName lastName')
-      return { ...user.toObject(), solvedCount: r.solvedCount }
+      return { ...user.toObject(), solvedCount: r.solvedCount, lastSolveTime: r.lastSolveTime }
     }))
 
     res.status(200).json(leaderboard)

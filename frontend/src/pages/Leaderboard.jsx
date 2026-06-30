@@ -29,6 +29,7 @@ function Leaderboard() {
             <th style={{ textAlign: 'left', padding: '10px', borderBottom: '1px solid #ccc' }}>Rank</th>
             <th style={{ textAlign: 'left', padding: '10px', borderBottom: '1px solid #ccc' }}>User</th>
             <th style={{ textAlign: 'left', padding: '10px', borderBottom: '1px solid #ccc' }}>Solved</th>
+            <th style={{ textAlign: 'left', padding: '10px', borderBottom: '1px solid #ccc' }}>Last AC</th>
           </tr>
         </thead>
         <tbody>
@@ -37,6 +38,7 @@ function Leaderboard() {
               <td style={{ padding: '10px', borderBottom: '1px solid #eee' }}>#{index + 1}</td>
               <td style={{ padding: '10px', borderBottom: '1px solid #eee' }}>{user.firstName} {user.lastName}</td>
               <td style={{ padding: '10px', borderBottom: '1px solid #eee' }}>{user.solvedCount}</td>
+              <td style={{ padding: '10px', borderBottom: '1px solid #eee' }}>{new Date(user.lastSolveTime).toLocaleString()}</td>
             </tr>
           ))}
         </tbody>
