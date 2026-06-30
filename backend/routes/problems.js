@@ -37,4 +37,26 @@ router.post('/', authMiddleware, async (req, res) => {
   }
 })
 
+// Update problem
+router.put('/:id', authMiddleware, async (req, res) => {
+  try {
+    const problem = await Problem.findByIdAndUpdate(req.params.id, req.body, { new: true })
+    if (!problem) return res.status(404).json({ message: 'Problem not found' })
+    res.status(200).json(problem)
+  } catch (err) {
+    res.status(500).json({ message: err.message })
+  }
+})
+
+// Delete problem
+router.delete('/:id', authMiddleware, async (req, res) => {
+  try {
+    const problem = await Problem.findByIdAndDelete(req.params.id)
+    if (!problem) return res.status(404).json({ message: 'Problem not found' })
+    res.status(200).json({ message: 'Problem deleted' })
+  } catch (err) {
+    res.status(500).json({ message: err.message })
+  }
+})
+
 module.exports = router
