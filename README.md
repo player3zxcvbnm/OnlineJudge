@@ -188,10 +188,7 @@ OnlineJudge/
 ├── backend/
 │   ├── models/         ← MongoDB schemas
 │   ├── routes/         ← API route definitions
-│   ├── controllers/    ← Route logic
 │   ├── middlewares/    ← JWT auth
-│   ├── config/         ← Database connection
-│   ├── compiler/       ← Code execution logic
 │   ├── docker/         ← Docker sandbox setup
 │   ├── queue/          ← BullMQ job queue
 │   └── server.js
