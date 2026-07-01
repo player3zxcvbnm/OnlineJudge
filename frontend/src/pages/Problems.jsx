@@ -1,3 +1,4 @@
+import { API_BASE } from '../api/config'
 import { useEffect, useState } from 'react'
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
@@ -10,7 +11,7 @@ function Problems() {
   useEffect(() => {
     const fetchProblems = async () => {
       try {
-        const res = await axios.get('http://15.206.163.176:5000/api/problems')
+        const res = await axios.get(API_BASE + '/api/problems')
         setProblems(res.data)
       } catch (err) {
         console.log(err)
@@ -47,3 +48,4 @@ function Problems() {
 }
 
 export default Problems
+

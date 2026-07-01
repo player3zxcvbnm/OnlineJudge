@@ -1,3 +1,4 @@
+import { API_BASE } from '../api/config'
 import { useEffect, useState } from 'react'
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
@@ -11,7 +12,7 @@ function Contests() {
   useEffect(() => {
     const fetchContests = async () => {
       try {
-        const res = await axios.get(`http://15.206.163.176:5000/api/contests?status=${tab}`)
+        const res = await axios.get(`\/api/contests?status=${tab}`)
         setContests(res.data)
       } catch (err) {
         console.log(err)
@@ -56,3 +57,4 @@ function Contests() {
 }
 
 export default Contests
+

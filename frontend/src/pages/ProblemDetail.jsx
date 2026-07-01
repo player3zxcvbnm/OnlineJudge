@@ -1,3 +1,4 @@
+import { API_BASE } from '../api/config'
 import { useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import axios from 'axios'
@@ -20,7 +21,7 @@ function ProblemDetail() {
   useEffect(() => {
     const fetchProblem = async () => {
       try {
-        const res = await axios.get(`http://15.206.163.176:5000/api/problems/${id}`)
+        const res = await axios.get(`\/api/problems/${id}`)
         setProblem(res.data)
       } catch (err) {
         console.log(err)
@@ -34,13 +35,13 @@ function ProblemDetail() {
       setSubmitting(true)
       setVerdict('PENDING')
       const token = localStorage.getItem('token')
-      const res = await axios.post('http://15.206.163.176:5000/api/submissions', {
+      const res = await axios.post(API_BASE + '/api/submissions', {
         problemId: id, code, language
       }, { headers: { Authorization: `Bearer ${token}` } })
 
       const submissionId = res.data.submissionId
       const interval = setInterval(async () => {
-        const verdictRes = await axios.get(`http://15.206.163.176:5000/api/submissions/${submissionId}`, {
+        const verdictRes = await axios.get(`\/api/submissions/${submissionId}`, {
           headers: { Authorization: `Bearer ${token}` }
         })
         const v = verdictRes.data.verdict
@@ -62,7 +63,7 @@ function ProblemDetail() {
       setRunning(true)
       setOutput('')
       const token = localStorage.getItem('token')
-      const res = await axios.post('http://15.206.163.176:5000/api/execute', {
+      const res = await axios.post(API_BASE + '/api/execute', {
         code, language, input: customInput
       }, { headers: { Authorization: `Bearer ${token}` } })
       setOutput(res.data.output)
@@ -181,3 +182,4 @@ function ProblemDetail() {
 }
 
 export default ProblemDetail
+

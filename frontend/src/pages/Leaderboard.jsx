@@ -1,3 +1,4 @@
+import { API_BASE } from '../api/config'
 import { useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import axios from 'axios'
@@ -11,7 +12,7 @@ function Leaderboard() {
   useEffect(() => {
     const fetchLeaderboard = async () => {
       try {
-        const res = await axios.get(`http://15.206.163.176:5000/api/leaderboard/${contestId}`)
+        const res = await axios.get(`\/api/leaderboard/${contestId}`)
         setRankings(res.data)
       } catch (err) {
         console.log(err)
@@ -49,3 +50,4 @@ function Leaderboard() {
 }
 
 export default Leaderboard
+

@@ -1,3 +1,4 @@
+import { API_BASE } from '../api/config'
 import { useEffect, useState } from 'react'
 import axios from 'axios'
 import '../styles/pages.css'
@@ -12,11 +13,11 @@ function Profile() {
       try {
         const token = localStorage.getItem('token')
         const headers = { Authorization: `Bearer ${token}` }
-        const userRes = await axios.get('http://15.206.163.176:5000/api/auth/profile', { headers })
+        const userRes = await axios.get(API_BASE + '/api/auth/profile', { headers })
         setUser(userRes.data)
-        const subRes = await axios.get(`http://15.206.163.176:5000/api/submissions/user/${userRes.data._id}`, { headers })
+        const subRes = await axios.get(`\/api/submissions/user/${userRes.data._id}`, { headers })
         setSubmissions(subRes.data)
-        const statsRes = await axios.get(`http://15.206.163.176:5000/api/auth/stats/${userRes.data._id}`, { headers })
+        const statsRes = await axios.get(`\/api/auth/stats/${userRes.data._id}`, { headers })
         setStats(statsRes.data)
       } catch (err) {
         console.log(err)
@@ -91,3 +92,4 @@ function Profile() {
 }
 
 export default Profile
+
