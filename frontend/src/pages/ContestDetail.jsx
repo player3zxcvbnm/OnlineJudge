@@ -11,7 +11,7 @@ function ContestDetail() {
   useEffect(() => {
     const fetchContest = async () => {
       try {
-        const res = await axios.get(`http://localhost:5000/api/contests/${id}`)
+        const res = await axios.get(`http://15.206.163.176:5000/api/contests/${id}`)
         setContest(res.data)
       } catch (err) {
         console.log(err)
