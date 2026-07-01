@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import axios from 'axios'
+import '../styles/pages.css'
 
 function Leaderboard() {
   const { contestId } = useParams()
@@ -20,25 +21,25 @@ function Leaderboard() {
   }, [contestId])
 
   return (
-    <div style={{ maxWidth: '800px', margin: '50px auto' }}>
-      <button onClick={() => navigate(-1)} style={{ marginBottom: '20px', padding: '6px 14px', cursor: 'pointer' }}>← Back</button>
-      <h2>Leaderboard</h2>
-      <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+    <div className="page-container">
+      <button className="back-btn" onClick={() => navigate(-1)}>← Back</button>
+      <h2 className="page-title">Leaderboard</h2>
+      <table>
         <thead>
           <tr>
-            <th style={{ textAlign: 'left', padding: '10px', borderBottom: '1px solid #ccc' }}>Rank</th>
-            <th style={{ textAlign: 'left', padding: '10px', borderBottom: '1px solid #ccc' }}>User</th>
-            <th style={{ textAlign: 'left', padding: '10px', borderBottom: '1px solid #ccc' }}>Solved</th>
-            <th style={{ textAlign: 'left', padding: '10px', borderBottom: '1px solid #ccc' }}>Last AC</th>
+            <th>Rank</th>
+            <th>User</th>
+            <th>Solved</th>
+            <th>Last AC</th>
           </tr>
         </thead>
         <tbody>
           {rankings.map((user, index) => (
             <tr key={user._id}>
-              <td style={{ padding: '10px', borderBottom: '1px solid #eee' }}>#{index + 1}</td>
-              <td style={{ padding: '10px', borderBottom: '1px solid #eee' }}>{user.firstName} {user.lastName}</td>
-              <td style={{ padding: '10px', borderBottom: '1px solid #eee' }}>{user.solvedCount}</td>
-              <td style={{ padding: '10px', borderBottom: '1px solid #eee' }}>{new Date(user.lastSolveTime).toLocaleString()}</td>
+              <td style={{ color: index === 0 ? '#f0c040' : '#888', fontWeight: index === 0 ? '600' : '400' }}>#{index + 1}</td>
+              <td>{user.firstName} {user.lastName}</td>
+              <td style={{ color: '#4c9be8', fontWeight: '600' }}>{user.solvedCount}</td>
+              <td style={{ color: '#666', fontSize: '13px' }}>{new Date(user.lastSolveTime).toLocaleString()}</td>
             </tr>
           ))}
         </tbody>

@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
+import '../styles/pages.css'
 
 function Login() {
   const [form, setForm] = useState({ email: '', password: '' })
@@ -23,15 +24,15 @@ function Login() {
   }
 
   return (
-    <div style={{ maxWidth: '400px', margin: '100px auto' }}>
-      <h2>Login</h2>
-      {error && <p style={{ color: 'red' }}>{error}</p>}
+    <div className="form-container">
+      <h2 className="form-title">Login</h2>
+      {error && <p className="error-msg">{error}</p>}
       <form onSubmit={handleSubmit}>
-        <input name="email" placeholder="Email" onChange={handleChange} /><br />
-        <input name="password" type="password" placeholder="Password" onChange={handleChange} /><br />
-        <button type="submit">Login</button>
+        <input name="email" placeholder="Email" onChange={handleChange} />
+        <input name="password" type="password" placeholder="Password" onChange={handleChange} />
+        <button type="submit" className="btn-primary" style={{ width: '100%' }}>Login</button>
       </form>
-      <p>Don't have an account? <a href="/register">Register</a></p>
+      <p className="form-footer">Don't have an account? <a href="/register">Register</a></p>
     </div>
   )
 }

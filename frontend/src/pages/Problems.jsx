@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
+import '../styles/pages.css'
 
 function Problems() {
   const [problems, setProblems] = useState([])
@@ -18,23 +19,25 @@ function Problems() {
     fetchProblems()
   }, [])
 
+  const diffClass = (d) => d === 'Easy' ? 'badge-easy' : d === 'Medium' ? 'badge-medium' : 'badge-hard'
+
   return (
-    <div style={{ maxWidth: '800px', margin: '50px auto' }}>
-      <h2>Problems</h2>
-      <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+    <div className="page-container">
+      <h2 className="page-title">Problems</h2>
+      <table>
         <thead>
           <tr>
-            <th style={{ textAlign: 'left', padding: '10px', borderBottom: '1px solid #ccc' }}>Title</th>
-            <th style={{ textAlign: 'left', padding: '10px', borderBottom: '1px solid #ccc' }}>Difficulty</th>
-            <th style={{ textAlign: 'left', padding: '10px', borderBottom: '1px solid #ccc' }}>Tags</th>
+            <th>Title</th>
+            <th>Difficulty</th>
+            <th>Tags</th>
           </tr>
         </thead>
         <tbody>
           {problems.map((problem) => (
             <tr key={problem._id} onClick={() => navigate(`/problems/${problem._id}`)} style={{ cursor: 'pointer' }}>
-              <td style={{ padding: '10px', borderBottom: '1px solid #eee' }}>{problem.title}</td>
-              <td style={{ padding: '10px', borderBottom: '1px solid #eee', color: problem.difficulty === 'Easy' ? 'green' : problem.difficulty === 'Medium' ? 'orange' : 'red' }}>{problem.difficulty}</td>
-              <td style={{ padding: '10px', borderBottom: '1px solid #eee' }}>{problem.tags.join(', ')}</td>
+              <td>{problem.title}</td>
+              <td><span className={diffClass(problem.difficulty)}>{problem.difficulty}</span></td>
+              <td style={{ color: '#666', fontSize: '13px' }}>{problem.tags.join(', ')}</td>
             </tr>
           ))}
         </tbody>

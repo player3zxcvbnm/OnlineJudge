@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import axios from 'axios'
+import '../styles/pages.css'
 
 function ContestDetail() {
   const { id } = useParams()
@@ -19,25 +20,38 @@ function ContestDetail() {
     fetchContest()
   }, [id])
 
-  if (!contest) return <p>Loading...</p>
+  if (!contest) return <div className="page-container"><p>Loading...</p></div>
+
+  const diffClass = (d) => d === 'Easy' ? 'badge-easy' : d === 'Medium' ? 'badge-medium' : 'badge-hard'
 
   return (
-    <div style={{ maxWidth: '800px', margin: '50px auto' }}>
-      <button onClick={() => navigate(-1)} style={{ marginBottom: '20px', padding: '6px 14px', cursor: 'pointer' }}>← Back</button>
-      <h2>{contest.title}</h2>
-      <p>{contest.description}</p>
-      <p>{new Date(contest.startTime).toLocaleString()} — {new Date(contest.endTime).toLocaleString()}</p>
+    <div className="page-container">
+      <button className="back-btn" onClick={() => navigate(-1)}>← Back</button>
+      <h2 className="page-title">{contest.title}</h2>
+      <p style={{ color: '#888', marginBottom: '8px' }}>{contest.description}</p>
+      <p style={{ color: '#666', fontSize: '13px', marginBottom: '24px' }}>
+        {new Date(contest.startTime).toLocaleString()} — {new Date(contest.endTime).toLocaleString()}
+      </p>
       <hr />
-      <h3>Problems</h3>
-      <ul>
-        {contest.problems.map((p) => (
-          <li key={p._id} onClick={() => navigate(`/problems/${p._id}`)} style={{ cursor: 'pointer', padding: '8px 0' }}>
-            {p.title} - {p.difficulty}
-          </li>
-        ))}
-      </ul>
-      <hr />
-      <button onClick={() => navigate(`/leaderboard/${contest._id}`)} style={{ padding: '8px 16px', cursor: 'pointer' }}>
+      <h3 style={{ margin: '20px 0 12px' }}>Problems</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Title</th>
+            <th>Difficulty</th>
+          </tr>
+        </thead>
+        <tbody>
+          {contest.problems.map((p) => (
+            <tr key={p._id} onClick={() => navigate(`/problems/${p._id}`)} style={{ cursor: 'pointer' }}>
+              <td>{p.title}</td>
+              <td><span className={diffClass(p.difficulty)}>{p.difficulty}</span></td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+      <br />
+      <button className="btn-primary" onClick={() => navigate(`/leaderboard/${contest._id}`)}>
         View Leaderboard
       </button>
     </div>

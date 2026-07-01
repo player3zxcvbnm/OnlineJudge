@@ -1,4 +1,5 @@
 import { useNavigate } from 'react-router-dom'
+import '../styles/navbar.css'
 
 function Navbar() {
   const navigate = useNavigate()
@@ -9,13 +10,13 @@ function Navbar() {
   }
 
   return (
-    <nav style={{ padding: '10px 30px', background: '#1a1a1a', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-      <span onClick={() => navigate('/problems')} style={{ cursor: 'pointer', fontWeight: 'bold', fontSize: '18px', color: 'white' }}>OnlineJudge</span>
-      <div style={{ display: 'flex', gap: '20px' }}>
-        <span onClick={() => navigate('/problems')} style={{ cursor: 'pointer', color: 'white' }}>Problems</span>
-        <span onClick={() => navigate('/contests')} style={{ cursor: 'pointer', color: 'white' }}>Contests</span>
-        <span onClick={() => navigate('/profile')} style={{ cursor: 'pointer', color: 'white' }}>Profile</span>
-        <span onClick={logout} style={{ cursor: 'pointer', color: 'red' }}>Logout</span>
+    <nav className="navbar">
+      <span className="navbar-brand" onClick={() => navigate('/problems')}>OnlineJudge</span>
+      <div className="navbar-links">
+        <span className="nav-link" onClick={() => navigate('/problems')}>Problems</span>
+        <span className="nav-link" onClick={() => navigate('/contests')}>Contests</span>
+        <span className="nav-link" onClick={() => navigate('/profile')}>Profile</span>
+        <span className="nav-logout" onClick={logout}>Logout</span>
       </div>
     </nav>
   )

@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import axios from 'axios'
+import '../styles/pages.css'
 
 function Profile() {
   const [user, setUser] = useState(null)
@@ -11,13 +12,10 @@ function Profile() {
       try {
         const token = localStorage.getItem('token')
         const headers = { Authorization: `Bearer ${token}` }
-
         const userRes = await axios.get('http://localhost:5000/api/auth/profile', { headers })
         setUser(userRes.data)
-
         const subRes = await axios.get(`http://localhost:5000/api/submissions/user/${userRes.data._id}`, { headers })
         setSubmissions(subRes.data)
-
         const statsRes = await axios.get(`http://localhost:5000/api/auth/stats/${userRes.data._id}`, { headers })
         setStats(statsRes.data)
       } catch (err) {
@@ -27,62 +25,63 @@ function Profile() {
     fetchData()
   }, [])
 
-  if (!user) return <p>Loading...</p>
+  if (!user) return <div className="page-container"><p>Loading...</p></div>
 
   return (
-    <div style={{ maxWidth: '800px', margin: '50px auto' }}>
-      <h2>{user.firstName} {user.lastName}</h2>
-      <p>Email: {user.email}</p>
-      <p>Role: {user.role}</p>
+    <div className="page-container">
+      <div className="card">
+        <h2 style={{ marginBottom: '4px' }}>{user.firstName} {user.lastName}</h2>
+        <p style={{ color: '#666', fontSize: '13px' }}>{user.email} · {user.role}</p>
+      </div>
 
       {stats && (
         <>
-          <hr />
-          <h3>Stats</h3>
-          <div style={{ display: 'flex', gap: '30px', flexWrap: 'wrap', marginBottom: '20px' }}>
-            <div>
-              <p style={{ fontSize: '24px', fontWeight: 'bold', margin: 0 }}>{stats.totalSolved}</p>
-              <p style={{ margin: 0, color: '#888' }}>Problems Solved</p>
+          <h3 style={{ marginBottom: '16px' }}>Stats</h3>
+          <div className="stat-grid">
+            <div className="stat-card">
+              <div className="stat-number">{stats.totalSolved}</div>
+              <div className="stat-label">Solved</div>
             </div>
-            <div>
-              <p style={{ fontSize: '24px', fontWeight: 'bold', margin: 0 }}>{stats.totalSubmissions}</p>
-              <p style={{ margin: 0, color: '#888' }}>Total Submissions</p>
+            <div className="stat-card">
+              <div className="stat-number">{stats.totalSubmissions}</div>
+              <div className="stat-label">Submissions</div>
             </div>
-            <div>
-              <p style={{ fontSize: '24px', fontWeight: 'bold', margin: 0 }}>{stats.acceptanceRate}%</p>
-              <p style={{ margin: 0, color: '#888' }}>Acceptance Rate</p>
+            <div className="stat-card">
+              <div className="stat-number">{stats.acceptanceRate}%</div>
+              <div className="stat-label">Acceptance</div>
             </div>
-            <div>
-              <p style={{ fontSize: '24px', fontWeight: 'bold', margin: 0 }}>{stats.contestsParticipated}</p>
-              <p style={{ margin: 0, color: '#888' }}>Contests Participated</p>
+            <div className="stat-card">
+              <div className="stat-number">{stats.contestsParticipated}</div>
+              <div className="stat-label">Contests</div>
             </div>
           </div>
-          <p>
-            <span style={{ color: 'green' }}>Easy: {stats.difficultyBreakdown.Easy}</span> |{' '}
-            <span style={{ color: 'orange' }}>Medium: {stats.difficultyBreakdown.Medium}</span> |{' '}
-            <span style={{ color: 'red' }}>Hard: {stats.difficultyBreakdown.Hard}</span>
+          <p style={{ marginBottom: '24px', fontSize: '13px' }}>
+            <span className="badge-easy">Easy: {stats.difficultyBreakdown.Easy}</span>
+            {' · '}
+            <span className="badge-medium">Medium: {stats.difficultyBreakdown.Medium}</span>
+            {' · '}
+            <span className="badge-hard">Hard: {stats.difficultyBreakdown.Hard}</span>
           </p>
         </>
       )}
 
-      <hr />
-      <h3>Submission History</h3>
-      <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+      <h3 style={{ marginBottom: '16px' }}>Submission History</h3>
+      <table>
         <thead>
           <tr>
-            <th style={{ textAlign: 'left', padding: '10px', borderBottom: '1px solid #ccc' }}>Problem</th>
-            <th style={{ textAlign: 'left', padding: '10px', borderBottom: '1px solid #ccc' }}>Language</th>
-            <th style={{ textAlign: 'left', padding: '10px', borderBottom: '1px solid #ccc' }}>Verdict</th>
-            <th style={{ textAlign: 'left', padding: '10px', borderBottom: '1px solid #ccc' }}>Date</th>
+            <th>Problem</th>
+            <th>Language</th>
+            <th>Verdict</th>
+            <th>Date</th>
           </tr>
         </thead>
         <tbody>
           {submissions.map((sub) => (
             <tr key={sub._id}>
-              <td style={{ padding: '10px', borderBottom: '1px solid #eee' }}>{sub.problemId?.title || 'Unknown'}</td>
-              <td style={{ padding: '10px', borderBottom: '1px solid #eee' }}>{sub.language}</td>
-              <td style={{ padding: '10px', borderBottom: '1px solid #eee', color: sub.verdict === 'AC' ? 'green' : 'red' }}>{sub.verdict}</td>
-              <td style={{ padding: '10px', borderBottom: '1px solid #eee' }}>{new Date(sub.createdAt).toLocaleString()}</td>
+              <td>{sub.problemId?.title || 'Unknown'}</td>
+              <td style={{ color: '#888', fontSize: '13px' }}>{sub.language}</td>
+              <td><span className={sub.verdict === 'AC' ? 'badge-ac' : sub.verdict === 'PENDING' ? 'badge-pending' : 'badge-fail'}>{sub.verdict}</span></td>
+              <td style={{ color: '#666', fontSize: '13px' }}>{new Date(sub.createdAt).toLocaleString()}</td>
             </tr>
           ))}
         </tbody>

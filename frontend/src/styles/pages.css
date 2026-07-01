@@ -1,0 +1,154 @@
+.page-container {
+  max-width: 860px;
+  margin: 40px auto;
+  padding: 0 24px;
+}
+
+.page-title {
+  font-size: 22px;
+  font-weight: 600;
+  margin-bottom: 24px;
+  color: #fff;
+}
+
+.back-btn {
+  background: #1e1e1e;
+  color: #aaa;
+  border: 1px solid #2a2a2a;
+  padding: 6px 14px;
+  border-radius: 6px;
+  margin-bottom: 20px;
+  font-size: 13px;
+  display: inline-block;
+}
+
+.back-btn:hover {
+  background: #252525;
+  color: #fff;
+}
+
+.btn-primary {
+  background: #4c9be8;
+  color: #fff;
+  padding: 8px 20px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.btn-primary:hover {
+  background: #3a8ad4;
+}
+
+.btn-success {
+  background: #2ea043;
+  color: #fff;
+  padding: 6px 18px;
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+.btn-success:hover {
+  background: #238636;
+}
+
+.card {
+  background: #141414;
+  border: 1px solid #2a2a2a;
+  border-radius: 10px;
+  padding: 24px;
+  margin-bottom: 16px;
+}
+
+.badge-easy { color: #2ea043; font-weight: 500; }
+.badge-medium { color: #d29922; font-weight: 500; }
+.badge-hard { color: #e05555; font-weight: 500; }
+.badge-ac { color: #2ea043; font-weight: 500; }
+.badge-pending { color: #888; }
+.badge-fail { color: #e05555; font-weight: 500; }
+
+.stat-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 16px;
+  margin: 20px 0;
+}
+
+.stat-card {
+  background: #141414;
+  border: 1px solid #2a2a2a;
+  border-radius: 8px;
+  padding: 16px;
+  text-align: center;
+}
+
+.stat-number {
+  font-size: 28px;
+  font-weight: 700;
+  color: #4c9be8;
+}
+
+.stat-label {
+  font-size: 12px;
+  color: #666;
+  margin-top: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.tab-group {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.tab {
+  padding: 7px 16px;
+  border-radius: 6px;
+  font-size: 13px;
+  background: #1a1a1a;
+  color: #888;
+  border: 1px solid #2a2a2a;
+  cursor: pointer;
+  text-transform: capitalize;
+  transition: all 0.2s;
+}
+
+.tab.active {
+  background: #4c9be8;
+  color: #fff;
+  border-color: #4c9be8;
+}
+
+.form-container {
+  max-width: 420px;
+  margin: 100px auto;
+  padding: 32px;
+  background: #141414;
+  border: 1px solid #2a2a2a;
+  border-radius: 12px;
+}
+
+.form-title {
+  font-size: 22px;
+  font-weight: 600;
+  margin-bottom: 24px;
+  text-align: center;
+}
+
+.error-msg {
+  color: #e05555;
+  font-size: 13px;
+  margin-bottom: 12px;
+  padding: 8px 12px;
+  background: #2a1a1a;
+  border-radius: 6px;
+  border-left: 3px solid #e05555;
+}
+
+.form-footer {
+  text-align: center;
+  margin-top: 16px;
+  font-size: 13px;
+  color: #666;
+}

@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
+import '../styles/pages.css'
 
 function Contests() {
   const [contests, setContests] = useState([])
@@ -20,41 +21,32 @@ function Contests() {
   }, [tab])
 
   return (
-    <div style={{ maxWidth: '800px', margin: '50px auto' }}>
-      <h2>Contests</h2>
-      <div style={{ display: 'flex', gap: '15px', marginBottom: '20px' }}>
+    <div className="page-container">
+      <h2 className="page-title">Contests</h2>
+      <div className="tab-group">
         {['live', 'upcoming', 'archived'].map((t) => (
-          <button
-            key={t}
-            onClick={() => setTab(t)}
-            style={{
-              padding: '8px 16px',
-              cursor: 'pointer',
-              background: tab === t ? '#4CAF50' : '#333',
-              color: 'white',
-              border: 'none',
-              borderRadius: '4px',
-              textTransform: 'capitalize'
-            }}
-          >
+          <button key={t} className={`tab ${tab === t ? 'active' : ''}`} onClick={() => setTab(t)}>
             {t}
           </button>
         ))}
       </div>
-      <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+      <table>
         <thead>
           <tr>
-            <th style={{ textAlign: 'left', padding: '10px', borderBottom: '1px solid #ccc' }}>Title</th>
-            <th style={{ textAlign: 'left', padding: '10px', borderBottom: '1px solid #ccc' }}>Start</th>
-            <th style={{ textAlign: 'left', padding: '10px', borderBottom: '1px solid #ccc' }}>End</th>
+            <th>Title</th>
+            <th>Start</th>
+            <th>End</th>
           </tr>
         </thead>
         <tbody>
+          {contests.length === 0 && (
+            <tr><td colSpan="3" style={{ color: '#666', textAlign: 'center', padding: '32px' }}>No {tab} contests</td></tr>
+          )}
           {contests.map((contest) => (
             <tr key={contest._id} onClick={() => navigate(`/contests/${contest._id}`)} style={{ cursor: 'pointer' }}>
-              <td style={{ padding: '10px', borderBottom: '1px solid #eee' }}>{contest.title}</td>
-              <td style={{ padding: '10px', borderBottom: '1px solid #eee' }}>{new Date(contest.startTime).toLocaleString()}</td>
-              <td style={{ padding: '10px', borderBottom: '1px solid #eee' }}>{new Date(contest.endTime).toLocaleString()}</td>
+              <td>{contest.title}</td>
+              <td style={{ color: '#888', fontSize: '13px' }}>{new Date(contest.startTime).toLocaleString()}</td>
+              <td style={{ color: '#888', fontSize: '13px' }}>{new Date(contest.endTime).toLocaleString()}</td>
             </tr>
           ))}
         </tbody>
