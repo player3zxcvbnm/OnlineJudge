@@ -32,7 +32,7 @@ const runCode = (code, language, input) => {
     const dockerCmd = language === 'cpp'
       ? `docker run --rm --memory=256m --cpus=1 -v "${tmpDir}:/code" ${image} sh -c "${compileCmd} && ${runCmd}"`
       : `docker run --rm --memory=256m --cpus=1 -v "${tmpDir}:/code" ${image} sh -c "${runCmd}"`
-    exec(dockerCmd, { timeout: 15000 }, (err, stdout, stderr) => {
+    exec(dockerCmd, { timeout: 30000 }, (err, stdout, stderr) => {
       fs.rmSync(tmpDir, { recursive: true })
       if (err) {
         if (err.killed) resolve({ output: '', error: 'Time Limit Exceeded' })
