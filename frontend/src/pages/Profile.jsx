@@ -15,9 +15,9 @@ function Profile() {
         const headers = { Authorization: `Bearer ${token}` }
         const userRes = await axios.get(API_BASE + '/api/auth/profile', { headers })
         setUser(userRes.data)
-        const subRes = await axios.get(`\/api/submissions/user/${userRes.data._id}`, { headers })
+        const subRes = await axios.get(`${API_BASE}/api/submissions/user/${userRes.data._id}`, { headers })
         setSubmissions(subRes.data)
-        const statsRes = await axios.get(`\/api/auth/stats/${userRes.data._id}`, { headers })
+        const statsRes = await axios.get(`${API_BASE}/api/auth/stats/${userRes.data._id}`, { headers })
         setStats(statsRes.data)
       } catch (err) {
         console.log(err)
@@ -92,4 +92,5 @@ function Profile() {
 }
 
 export default Profile
+
 

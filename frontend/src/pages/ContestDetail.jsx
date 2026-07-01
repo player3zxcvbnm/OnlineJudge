@@ -12,7 +12,7 @@ function ContestDetail() {
   useEffect(() => {
     const fetchContest = async () => {
       try {
-        const res = await axios.get(`\/api/contests/${id}`)
+        const res = await axios.get(`${API_BASE}/api/contests/${id}`)
         setContest(res.data)
       } catch (err) {
         console.log(err)
@@ -60,4 +60,5 @@ function ContestDetail() {
 }
 
 export default ContestDetail
+
 

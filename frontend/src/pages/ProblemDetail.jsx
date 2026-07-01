@@ -21,7 +21,7 @@ function ProblemDetail() {
   useEffect(() => {
     const fetchProblem = async () => {
       try {
-        const res = await axios.get(`\/api/problems/${id}`)
+        const res = await axios.get(`${API_BASE}/api/problems/${id}`)
         setProblem(res.data)
       } catch (err) {
         console.log(err)
@@ -41,7 +41,7 @@ function ProblemDetail() {
 
       const submissionId = res.data.submissionId
       const interval = setInterval(async () => {
-        const verdictRes = await axios.get(`\/api/submissions/${submissionId}`, {
+        const verdictRes = await axios.get(`${API_BASE}/api/submissions/${submissionId}`, {
           headers: { Authorization: `Bearer ${token}` }
         })
         const v = verdictRes.data.verdict
@@ -182,4 +182,5 @@ function ProblemDetail() {
 }
 
 export default ProblemDetail
+
 
