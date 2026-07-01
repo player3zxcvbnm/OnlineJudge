@@ -1,8 +1,6 @@
 const { Worker } = require('bullmq')
 const mongoose = require('mongoose')
-const { exec } = require('child_process')
-const fs = require('fs')
-const path = require('path')
+const axios = require('axios')
 const IORedis = require('ioredis')
 const Submission = require('../models/Submission')
 const TestCase = require('../models/TestCase')
@@ -14,37 +12,46 @@ const connection = new IORedis(process.env.REDIS_URL, {
 
 mongoose.connect(process.env.MONGO_URI, { family: 4 })
 
-const runCode = (code, language, input) => {
-  return new Promise((resolve) => {
-    const tmpDir = fs.mkdtempSync(path.join(require('os').tmpdir(), 'oj-'))
-    let filename, image, compileCmd, runCmd
-    if (language === 'cpp') {
-      filename = path.join(tmpDir, 'solution.cpp')
-      fs.writeFileSync(filename, code)
-      image = 'gcc'
-      compileCmd = `g++ -o /tmp/solution /code/solution.cpp`
-      runCmd = `echo "${input.replace(/"/g, '\\"')}" | /tmp/solution`
-    } else if (language === 'python') {
-      filename = path.join(tmpDir, 'solution.py')
-      fs.writeFileSync(filename, code)
-      image = 'python:3.11-slim'
-      runCmd = `echo "${input.replace(/"/g, '\\"')}" | python3 /code/solution.py`
+const LANGUAGE_MAP = {
+  cpp: { language: 'cpp', version: '10.2.0' },
+  python: { language: 'python', version: '3.10.0' },
+  java: { language: 'java', version: '15.0.2' },
+  javascript: { language: 'javascript', version: '18.15.0' }
+}
+
+const runCode = async (code, language, input) => {
+  try {
+    const langConfig = LANGUAGE_MAP[language]
+    if (!langConfig) {
+      return { output: '', error: 'Unsupported language' }
     }
-    const inputFile = path.join(tmpDir, 'input.txt')
-    fs.writeFileSync(inputFile, input)
-    const dockerCmd = language === 'cpp'
-      ? `docker run --rm --memory=256m --cpus=1 -v "${tmpDir}:/code" ${image} sh -c "${compileCmd} && /tmp/solution < /code/input.txt"`
-      : `docker run --rm --memory=256m --cpus=1 -v "${tmpDir}:/code" ${image} sh -c "python3 /code/solution.py < /code/input.txt"`
-    exec(dockerCmd, { timeout: 15000 }, (err, stdout, stderr) => {
-      fs.rmSync(tmpDir, { recursive: true })
-      if (err) {
-        if (err.killed) resolve({ output: '', error: 'TLE' })
-        else resolve({ output: '', error: stderr || 'RE' })
-      } else {
-        resolve({ output: stdout.trim(), error: null })
-      }
-    })
-  })
+
+    const filename = {
+      cpp: 'solution.cpp',
+      python: 'solution.py',
+      java: 'Main.java',
+      javascript: 'solution.js'
+    }[language]
+
+    const res = await axios.post('https://emkc.org/api/v2/piston/execute', {
+      language: langConfig.language,
+      version: langConfig.version,
+      files: [{ name: filename, content: code }],
+      stdin: input
+    }, { timeout: 15000 })
+
+    const result = res.data.run
+
+    if (result.signal === 'SIGKILL' || result.code === 124) {
+      return { output: '', error: 'TLE' }
+    }
+    if (result.stderr && result.stderr.trim()) {
+      return { output: '', error: result.stderr }
+    }
+    return { output: result.stdout.trim(), error: null }
+  } catch (err) {
+    return { output: '', error: 'RE' }
+  }
 }
 
 const worker = new Worker('submissions', async (job) => {
