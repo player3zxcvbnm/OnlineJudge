@@ -1,51 +1,48 @@
 const express = require('express')
 const router = express.Router()
-const { exec } = require('child_process')
-const fs = require('fs')
-const path = require('path')
-const os = require('os')
+const axios = require('axios')
 const authMiddleware = require('../middlewares/auth')
 
-const runCode = (code, language, input) => {
-  return new Promise((resolve) => {
-    const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), 'oj-exec-'))
-    let filename, image, compileCmd, runCmd
+const LANGUAGE_MAP = {
+  cpp: { language: 'cpp', version: '10.2.0' },
+  python: { language: 'python', version: '3.10.0' },
+  java: { language: 'java', version: '15.0.2' },
+  javascript: { language: 'javascript', version: '18.15.0' }
+}
 
-    if (language === 'cpp') {
-      filename = path.join(tmpDir, 'solution.cpp')
-      fs.writeFileSync(filename, code)
-      image = 'gcc'
-      compileCmd = `g++ -o /tmp/solution /code/solution.cpp`
-      runCmd = `/tmp/solution < /code/input.txt`
-    } else if (language === 'python') {
-      filename = path.join(tmpDir, 'solution.py')
-      fs.writeFileSync(filename, code)
-      image = 'python:3.11-slim'
-      runCmd = `python3 /code/solution.py < /code/input.txt`
-    } else if (language === 'javascript') {
-      filename = path.join(tmpDir, 'solution.js')
-      fs.writeFileSync(filename, code)
-      image = 'node:18-slim'
-      runCmd = `node /code/solution.js < /code/input.txt`
+const runCode = async (code, language, input) => {
+  try {
+    const langConfig = LANGUAGE_MAP[language]
+    if (!langConfig) {
+      return { output: '', error: 'Unsupported language' }
     }
 
-    const inputFile = path.join(tmpDir, 'input.txt')
-    fs.writeFileSync(inputFile, input || '')
+    const filename = {
+      cpp: 'solution.cpp',
+      python: 'solution.py',
+      java: 'Main.java',
+      javascript: 'solution.js'
+    }[language]
 
-    const dockerCmd = language === 'cpp'
-      ? `docker run --rm --memory=256m --cpus=1 -v "${tmpDir}:/code" ${image} sh -c "${compileCmd} && ${runCmd}"`
-      : `docker run --rm --memory=256m --cpus=1 -v "${tmpDir}:/code" ${image} sh -c "${runCmd}"`
+    const res = await axios.post('https://emkc.org/api/v2/piston/execute', {
+      language: langConfig.language,
+      version: langConfig.version,
+      files: [{ name: filename, content: code }],
+      stdin: input || ''
+    }, { timeout: 15000 })
 
-    exec(dockerCmd, { timeout: 15000 }, (err, stdout, stderr) => {
-      fs.rmSync(tmpDir, { recursive: true })
-      if (err) {
-        if (err.killed) resolve({ output: '', error: 'Time Limit Exceeded' })
-        else resolve({ output: '', error: stderr || 'Runtime Error' })
-      } else {
-        resolve({ output: stdout, error: null })
-      }
-    })
-  })
+    const result = res.data.run
+
+    if (result.signal === 'SIGKILL' || result.code === 124) {
+      return { output: '', error: 'Time Limit Exceeded' }
+    }
+    if (result.stderr && result.stderr.trim()) {
+      return { output: '', error: result.stderr }
+    }
+    return { output: result.stdout, error: null }
+  } catch (err) {
+    return { output: '', error: 'Runtime Error' }
+  }
 }
 
 router.post('/', authMiddleware, async (req, res) => {
